@@ -1,5 +1,6 @@
-function sumar(a, b) {
-  return a + b;
+function calcularCadena(cadena) {
+  if (!cadena) {
+    return 0;
+  }
 }
-
-export default sumar;
+export default calcularCadena;

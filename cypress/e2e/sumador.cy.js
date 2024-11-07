@@ -1,9 +1,8 @@
 describe("Sumador", () => {
-  it("Shows the amount of the addition to the user", () => {
+  it("Deberia devolver 0 si la cadena esta vacia", () => {
     cy.visit("/");
-    cy.get("#primer-numero").type(4);
-    cy.get("#segundo-numero").type(5);
+    cy.get("#cadena").clear();
     cy.get("#sumar-button").click();
-    cy.get("#resultado-div").should("contain", "9");
+    cy.get("#resultado-div").should("contain","0");
   });
 });
