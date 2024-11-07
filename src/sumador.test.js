@@ -10,5 +10,8 @@ describe("Sumar", () => {
   it("Si los números están separados por una coma, deben sumarse", () => {
     expect(calcularCadena("1,2,3")).toEqual(6);
   });
+  it("Si los números están separados por una guion, deben sumarse", () => {
+    expect(calcularCadena("1-2-3")).toEqual(6);
+  });
 
 });
