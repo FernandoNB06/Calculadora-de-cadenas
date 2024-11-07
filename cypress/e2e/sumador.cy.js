@@ -31,4 +31,14 @@ describe("Sumador", () => {
     cy.get("#sumar-button").click();
     cy.get("#resultado-div").should("contain", "17");
   });
+  it("Debe ignorar números mayores a 1000", () => {
+    cy.visit("/");
+    cy.get("#cadena").type("2,1001");
+    cy.get("#sumar-button").click();
+    cy.get("#resultado-div").should("contain", "2"); // 1001 debe ser ignorado
+
+    cy.get("#cadena").clear().type("1000,1001,5");
+    cy.get("#sumar-button").click();
+    cy.get("#resultado-div").should("contain", "1005"); // 1000 se incluye, 1001 se ignora
+  });
 });
