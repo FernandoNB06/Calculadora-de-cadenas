@@ -47,4 +47,10 @@ describe("Sumador", () => {
     cy.get("#sumar-button").click();
     cy.get("#resultado-div").should("contain", "6"); // 1 + 2 + 3 = 6
   });
+  it("Debe manejar múltiples delimitadores", () => {
+    cy.visit("/");
+    cy.get("#cadena").type("//[*][%]\\n1*2%3"); // Nota: \\n para el salto de línea
+    cy.get("#sumar-button").click();
+    cy.get("#resultado-div").should("contain", "6"); // 1 + 2 + 3 = 6
+  });
 });

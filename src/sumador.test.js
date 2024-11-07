@@ -23,5 +23,8 @@ describe("Sumar", () => {
   it("Debe manejar delimitadores personalizados con más de un carácter", () => {
     expect(calcularCadena("//[***]\n1***2***3")).toEqual(6); // 1 + 2 + 3 = 6
   });
+  it("Debe manejar múltiples delimitadores", () => {
+    expect(calcularCadena("//[*][%]\n1*2%3")).toEqual(6); // 1 + 2 + 3 = 6
+  });
 
 });
