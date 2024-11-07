@@ -5,4 +5,11 @@ describe("Sumador", () => {
     cy.get("#sumar-button").click();
     cy.get("#resultado-div").should("contain","0");
   });
+
+  it("Deberia devolver 1 solo un numero", () => {
+    cy.visit("/");
+    cy.get("#cadena").type("1");
+    cy.get("#sumar-button").click();
+    cy.get("#resultado-div").should("contain","1");
+  });
 });
