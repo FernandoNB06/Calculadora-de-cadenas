@@ -25,4 +25,10 @@ describe("Sumador", () => {
     cy.get("#sumar-button").click();
     cy.get("#resultado-div").should("contain","6");
   });
+  it("Debe manejar delimitadores personalizados", () => {
+    cy.visit("/");
+    cy.get("#cadena").type("//[;]\\n6;7;4"); // Nota: \\n para el salto de línea
+    cy.get("#sumar-button").click();
+    cy.get("#resultado-div").should("contain", "17");
+  });
 });

@@ -13,5 +13,8 @@ describe("Sumar", () => {
   it("Si los números están separados por una guion, deben sumarse", () => {
     expect(calcularCadena("1-2-3")).toEqual(6);
   });
+  it("Debe manejar delimitadores personalizados", () => {
+    expect(calcularCadena("//[;]\n6;7;4")).toEqual(17); 
+  })
 
 });
