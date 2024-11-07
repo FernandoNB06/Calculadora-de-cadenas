@@ -20,5 +20,8 @@ describe("Sumar", () => {
     expect(calcularCadena("2,1001")).toEqual(2); // 1001 se ignora
     expect(calcularCadena("1000,1001,5")).toEqual(1005); // 1000 se incluye, pero 1001 se ignora
   });
+  it("Debe manejar delimitadores personalizados con más de un carácter", () => {
+    expect(calcularCadena("//[***]\n1***2***3")).toEqual(6); // 1 + 2 + 3 = 6
+  });
 
 });
