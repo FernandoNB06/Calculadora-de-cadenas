@@ -1,0 +1,17 @@
+Historia de Usuario
+Título: Como usuario, quiero poder ingresar una cadena de números a la calculadora y obtener la suma de los números separados por distintos delimitadores.
+
+Descripción: La calculadora de cadenas debe recibir una cadena de números separados por comas,
+guiones, o delimitadores personalizados especificados por el usuario y devolver la suma de dichos números.
+Números mayores a 1000 deben ser ignorados.
+
+Criterios de Confirmación:
+
+Si la cadena está vacía, la calculadora debe retornar 0.
+Si la cadena tiene un solo número, la calculadora debe devolver ese número.
+Si los números están separados por una coma, deben sumarse. Ejemplo: "1,2,3" debe retornar 6.
+Si los números están separados por un guion, deben sumarse. Ejemplo: "1-2-3" debe retornar 6.
+Se debe poder especificar un delimitador usando el formato //[delimitador]\n. Ejemplo: "//[;]\n6;7;4" debe retornar 17.
+Números mayores a 1000 deben ser ignorados. Ejemplo: "2,1001" debe retornar 2.
+Delimitadores personalizados pueden tener más de un carácter. Ejemplo: "//[***]\n1***2***3" debe retornar 6.
+Se pueden especificar múltiples delimitadores. Ejemplo: "//[*][%]\n1*2%3" debe retornar 6
