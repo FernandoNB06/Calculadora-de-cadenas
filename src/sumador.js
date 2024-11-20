@@ -9,6 +9,8 @@ function calcular(cadena) {
 
   const numeros = cadenaNumeros.split(delimitador).map(Number);
 
+  verificarNumerosNegativos(numeros); // Validar números negativos antes de continuar
+
   const numerosValidos = excluirNumerosMayoresA1000(numeros);
 
   return numerosValidos.reduce((acc, num) => acc + num, 0);
