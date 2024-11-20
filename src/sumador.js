@@ -19,25 +19,18 @@ function calcular(cadena) {
 function extraerDelimitadorYCadena(cadena) {
   const delimitadorPorDefecto = /,|-/;
 
-  // Caso sin delimitador personalizado
   const delimitadorPersonalizado = cadena.match(/^\/\/(\[.+?\])+\s/);
   if (!delimitadorPersonalizado) {
     return { delimitador: delimitadorPorDefecto, cadenaNumeros: cadena };
   }
 
-  // Extraer delimitadores entre corchetes
   const delimitadores = [...cadena.matchAll(/\[(.+?)\]/g)].map(match => match[1]);
+  const delimitadoresEscapados = delimitadores.map(escaparDelimitador);
 
-  const delimitadorRegex = crearRegexDelimitadores(delimitadores);
-
+  const delimitador = new RegExp(`${delimitadoresEscapados.join("|")}|,|-`);
   const cadenaNumeros = cadena.slice(delimitadorPersonalizado[0].length);
 
-  return { delimitador: delimitadorRegex, cadenaNumeros };
-}
-
-function crearRegexDelimitadores(delimitadores) {
-  const delimitadoresEscapados = delimitadores.map(escaparDelimitador);
-  return new RegExp(delimitadoresEscapados.join("|"));
+  return { delimitador, cadenaNumeros };
 }
 
 function escaparDelimitador(delimitador) {
