@@ -1,60 +1,47 @@
-class CalculadoraDeCadenas {
-  constructor() {
-    this.delimitadoresPorDefecto = [",", "-"];
+function calcularCadena(cadena) {
+  if (!cadena) return 0; // Si la cadena está vacía, devolver 0
+
+  const delimitadorRegex = generarRegexDelimitadores(cadena);
+
+  // Si comienza con delimitadores personalizados, separa la parte de números
+  const numerosCadena = cadena.startsWith("//")
+    ? cadena.slice(cadena.indexOf("\n") + 1)
+    : cadena;
+
+  return dividirYSumar(numerosCadena, delimitadorRegex);
+}
+
+function generarRegexDelimitadores(cadena) {
+  const delimitadoresPorDefecto = [",", "-"];
+
+  if (cadena.startsWith("//")) {
+    const delimitadorFin = cadena.indexOf("\n");
+    const delimitadorParte = cadena.slice(2, delimitadorFin);
+
+    const delimitadores = delimitadorParte.startsWith("[")
+      ? (delimitadorParte.match(/\[([^\]]+)\]/g) || []).map(d => d.slice(1, -1))
+      : [delimitadorParte];
+
+    const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(delimitadores.map(escapeRegExp).join("|"), "g");
   }
 
-  calcular(cadena) {
-    if (!cadena) return 0;
+  return new RegExp(delimitadoresPorDefecto.map(d => d.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"), "g");
+}
 
-    this.validarCadena(cadena);
+function dividirYSumar(cadena, delimitadorRegex) {
+  const numeros = cadena.split(delimitadorRegex).map(Number);
+  validarNumeros(numeros); // Validar números negativos
+  return numeros
+    .filter(num => num <= 1000) // Ignorar números mayores a 1000
+    .reduce((suma, num) => suma + num, 0);
+}
 
-    const delimitadorRegex = this.generarExpresionDelimitadores(cadena);
-    const numeros = cadena.split(delimitadorRegex).map(Number);
-
-    return this.sumarNumeros(numeros);
-  }
-
-  generarExpresionDelimitadores(cadena) {
-    if (cadena.startsWith("//")) {
-      const delimitadorFin = cadena.indexOf("\n");
-      const delimitadorParte = cadena.slice(2, delimitadorFin);
-
-      // Extraer delimitadores personalizados entre corchetes
-      const delimitadores = (delimitadorParte.match(/\[([^\]]+)\]/g) || []).map(d => d.slice(1, -1));
-      return new RegExp(
-        delimitadores.map(this.escapeRegExp).join("|"),
-        "g"
-      );
-    }
-
-    // Usar delimitadores por defecto si no hay personalizados
-    return new RegExp(this.delimitadoresPorDefecto.map(this.escapeRegExp).join("|"), "g");
-  }
-
-  validarCadena(cadena) {
-    const numeros = cadena.split(/[^0-9-]/).filter(Boolean);
-    if (numeros.some(num => isNaN(num))) {
-      throw new Error("La cadena contiene caracteres inválidos.");
-    }
-  }
-
-  sumarNumeros(numeros) {
-    this.validarNumeros(numeros);
-    return numeros
-      .filter(num => num <= 1000) // Ignorar números > 1000
-      .reduce((suma, num) => suma + num, 0);
-  }
-
-  validarNumeros(numeros) {
-    const negativos = numeros.filter(num => num < 0);
-    if (negativos.length > 0) {
-      throw new Error(`Números negativos no permitidos: ${negativos.join(", ")}`);
-    }
-  }
-
-  escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function validarNumeros(numeros) {
+  const negativos = numeros.filter(num => num < 0);
+  if (negativos.length > 0) {
+    throw new Error(`Números negativos no permitidos: ${negativos.join(", ")}`);
   }
 }
 
-export default CalculadoraDeCadenas;
+export default calcularCadena;
