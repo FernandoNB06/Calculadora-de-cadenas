@@ -7,7 +7,11 @@ function calcular(cadena) {
 
   const { delimitador, cadenaNumeros } = extraerDelimitadorYCadena(cadena);
 
-  return sumarNumerosDesdeCadena(cadenaNumeros, delimitador);
+  const numeros = cadenaNumeros.split(delimitador).map(Number);
+
+  const numerosValidos = excluirNumerosMayoresA1000(numeros);
+
+  return numerosValidos.reduce((acc, num) => acc + num, 0);
 }
 
 function extraerDelimitadorYCadena(cadena) {
@@ -36,15 +40,6 @@ function crearRegexDelimitadores(delimitadores) {
 
 function escaparDelimitador(delimitador) {
   return delimitador.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function sumarNumerosDesdeCadena(cadena, delimitadorRegex) {
-  const numeros = cadena.split(delimitadorRegex).map(Number);
-  verificarNumerosNegativos(numeros); // Validar números negativos
-
-  const numerosValidos = excluirNumerosMayoresA1000(numeros);
-
-  return numerosValidos.reduce((suma, num) => suma + num, 0);
 }
 
 function excluirNumerosMayoresA1000(numeros) {
