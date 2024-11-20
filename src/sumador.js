@@ -1,15 +1,13 @@
-function esCadenaVacia(cadena) {
-  return !cadena || cadena.trim() === ""; // Verifica cadenas vacías o solo espacios
-}
+function calcular(cadenaEntrada) {
+  if (esCadenaVacia(cadenaEntrada)) {
+    return 0;
+  }
 
-function calcular(cadena) {
-  if (esCadenaVacia(cadena)) return 0;
-
-  const { delimitador, cadenaNumeros } = extraerDelimitadorYCadena(cadena);
+  const { delimitador, cadenaNumeros } = extraerDelimitadorYCadena(cadenaEntrada);
 
   const numeros = cadenaNumeros.split(delimitador).map(Number);
 
-  verificarNumerosNegativos(numeros); // Validar números negativos antes de continuar
+  verificarNumerosNegativos(numeros);
 
   const numerosValidos = excluirNumerosMayoresA1000(numeros);
 
@@ -33,8 +31,8 @@ function extraerDelimitadorYCadena(cadena) {
   return { delimitador, cadenaNumeros };
 }
 
-function escaparDelimitador(delimitador) {
-  return delimitador.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function esCadenaVacia(cadenaEntrada) {
+  return cadenaEntrada.trim() === "";
 }
 
 function excluirNumerosMayoresA1000(numeros) {
@@ -46,6 +44,10 @@ function verificarNumerosNegativos(numeros) {
   if (negativos.length > 0) {
     throw new Error(`Números negativos no permitidos: ${negativos.join(", ")}`);
   }
+}
+
+function escaparDelimitador(delimitador) {
+  return delimitador.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 export default calcular;
