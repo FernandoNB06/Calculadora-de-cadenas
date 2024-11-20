@@ -35,9 +35,14 @@ function crearRegexParaDelimitadores(cadena) {
 function sumarNumerosDesdeCadena(cadena, delimitadorRegex) {
   const numeros = cadena.split(delimitadorRegex).map(Number);
   verificarNumerosNegativos(numeros); // Validar números negativos
-  return numeros
-    .filter(num => num <= 1000) // Ignorar números mayores a 1000
-    .reduce((suma, num) => suma + num, 0);
+
+  const numerosValidos = excluirNumerosMayoresA1000(numeros);
+
+  return numerosValidos.reduce((suma, num) => suma + num, 0);
+}
+
+function excluirNumerosMayoresA1000(numeros) {
+  return numeros.filter(num => num <= 1000);
 }
 
 function verificarNumerosNegativos(numeros) {
