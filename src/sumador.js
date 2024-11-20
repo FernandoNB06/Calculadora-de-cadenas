@@ -1,42 +1,50 @@
-function extraerDelimitadorYNumeros(cadenaEntrada) {
-  const delimitadoresDefault = /,|-/;
+function calcularCadena(cadena) {
+  if (!cadena) return 0;
 
-  const delimitadorPersonalizado = cadenaEntrada.match(/^\/\/(\[.+?\])+\s/);
-  if (!delimitadorPersonalizado) {
-    return { delimitador: delimitadoresDefault, cadenaNumeros: cadenaEntrada };
+  const numero = Number(cadena);
+  if (!isNaN(numero) && numero <= 1000) return numero;
+
+  if (cadena.includes(",")) {
+    return dividirYSumar(cadena, ",");
   }
 
-  const delimitadores = [...cadenaEntrada.matchAll(/\[(.+?)\]/g)].map(match => match[1]);
-  const delimitadoresEscapados = delimitadores.map(delim => delim.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-
-  const delimitador = new RegExp(`${delimitadoresEscapados.join('|')}|,|-`);
-  const cadenaNumeros = cadenaEntrada.slice(delimitadorPersonalizado[0].length);
-
-  return { delimitador: expresionDelimitadores, numerosComoTexto };
-}
-
-function esCadenaEntradaVacia(cadenaEntrada) {
-  return cadenaEntrada.trim() === "";
-}
-
-function filtrarNumerosValidos(numeros) {
-  return numeros.filter(num => num <= 1000);
-}
-
-function sumarNumerosDeCadena(cadenaEntrada) {
-  if (esCadenaEntradaVacia(cadenaEntrada)) {
-    return 0;
+  if (cadena.includes("-")) {
+    return dividirYSumar(cadena, "-");
   }
 
-  const { delimitador: expresionDelimitadores, numerosComoTexto } = extraerDelimitadorYNumeros(cadenaEntrada);
+  if (cadena.startsWith("//")) {
+    return procesarDelimitadoresPersonalizados(cadena);
+  }
 
-  const numerosParseados = numerosComoTexto
-    .split(expresionDelimitadores)
-    .map(Number);
-
-  const numerosValidos = filtrarNumerosValidos(numerosParseados);
-
-  return numerosValidos.reduce((acc, num) => acc + num, 0);
+  return 0; // Caso por defecto
 }
 
-export default sumarNumerosDeCadena;
+function dividirYSumar(cadena, delimitador) {
+  const numeros = cadena.split(delimitador).map(Number);
+  return sumarNumeros(numeros);
+}
+
+function sumarNumeros(numeros) {
+  return numeros
+    .filter(num => num <= 1000) // Ignorar números > 1000
+    .reduce((suma, num) => suma + num, 0);
+}
+
+function procesarDelimitadoresPersonalizados(cadena) {
+  const delimitadorFin = cadena.indexOf("\n");
+  const delimitadorParte = cadena.slice(2, delimitadorFin);
+
+  // Extraer delimitadores entre corchetes
+  const delimitadores = (delimitadorParte.match(/\[([^\]]+)\]/g) || []).map(d => d.slice(1, -1));
+
+  // Crear expresión regular para los delimitadores
+  const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const delimitadorRegex = new RegExp(delimitadores.map(d => escapeRegExp(d)).join("|"), "g");
+
+  // Obtener la parte numérica de la cadena
+  const numeros = cadena.slice(delimitadorFin + 1).split(delimitadorRegex).map(Number);
+
+  return sumarNumeros(numeros);
+}
+
+export default calcularCadena;

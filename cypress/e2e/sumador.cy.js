@@ -43,14 +43,14 @@ describe("Sumador", () => {
   });
   it("Debe manejar delimitadores personalizados con más de un carácter", () => {
     cy.visit("/");
-    cy.get("#cadena").type("//[***]\\n1***2***3"); // Nota: \\n para el salto de línea
+    cy.get("#cadena").type("//[***] 1***2***3"); // Nota: \\n para el salto de línea
     cy.get("#sumar-button").click();
     cy.get("#resultado-div").should("contain", "6"); // 1 + 2 + 3 = 6
   });
   it("Debe manejar múltiples delimitadores", () => {
     cy.visit("/");
-    cy.get("#cadena").type("//[*][%]\\n1*2%3"); // Nota: \\n para el salto de línea
+    cy.get("#cadena").type("//[*][%] 1*2%3,7-9"); // Nota: \\n para el salto de línea
     cy.get("#sumar-button").click();
-    cy.get("#resultado-div").should("contain", "6"); // 1 + 2 + 3 = 6
+    cy.get("#resultado-div").should("contain", "22"); // 1 + 2 + 3 = 6
   });
 });
