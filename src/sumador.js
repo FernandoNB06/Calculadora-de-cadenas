@@ -1,9 +1,12 @@
+function esCadenaVacia(cadena) {
+  return !cadena || cadena.trim() === ""; // Verifica cadenas vacías o solo espacios
+}
+
 function sumarDesdeCadena(cadena) {
-  if (!cadena) return 0; // Si la cadena está vacía, devolver 0
+  if (esCadenaVacia(cadena)) return 0; // Si la cadena está vacía, devolver 0
 
   const delimitadorRegex = crearRegexParaDelimitadores(cadena);
 
-  // Si comienza con delimitadores personalizados, separa la parte de números
   const numerosCadena = cadena.startsWith("//")
     ? cadena.slice(cadena.indexOf("\n") + 1)
     : cadena;
