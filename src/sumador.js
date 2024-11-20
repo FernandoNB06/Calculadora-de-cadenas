@@ -2,7 +2,7 @@ function esCadenaVacia(cadena) {
   return !cadena || cadena.trim() === ""; // Verifica cadenas vacías o solo espacios
 }
 
-function sumarDesdeCadena(cadena) {
+function calcular(cadena) {
   if (esCadenaVacia(cadena)) return 0;
 
   const { delimitador, cadenaNumeros } = extraerDelimitadorYCadena(cadena);
@@ -13,27 +13,29 @@ function sumarDesdeCadena(cadena) {
 function extraerDelimitadorYCadena(cadena) {
   const delimitadorPorDefecto = /,|-/;
 
-  if (!cadena.startsWith("//")) {
+  // Caso sin delimitador personalizado
+  const delimitadorPersonalizado = cadena.match(/^\/\/(\[.+?\])+\s/);
+  if (!delimitadorPersonalizado) {
     return { delimitador: delimitadorPorDefecto, cadenaNumeros: cadena };
   }
 
-  const delimitadorFin = cadena.indexOf("\n");
-  const delimitadorParte = cadena.slice(2, delimitadorFin);
+  // Extraer delimitadores entre corchetes
+  const delimitadores = [...cadena.matchAll(/\[(.+?)\]/g)].map(match => match[1]);
 
-  const delimitadores = delimitadorParte.startsWith("[")
-    ? (delimitadorParte.match(/\[(.+?)\]/g) || []).map(match => match.slice(1, -1))
-    : [delimitadorParte];
+  const delimitadorRegex = crearRegexDelimitadores(delimitadores);
 
-  const delimitadoresEscapados = delimitadores.map(delim =>
-    delim.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-  );
+  const cadenaNumeros = cadena.slice(delimitadorPersonalizado[0].length);
 
-  const delimitadorRegex = new RegExp(delimitadoresEscapados.join("|"));
+  return { delimitador: delimitadorRegex, cadenaNumeros };
+}
 
-  return {
-    delimitador: delimitadorRegex,
-    cadenaNumeros: cadena.slice(delimitadorFin + 1),
-  };
+function crearRegexDelimitadores(delimitadores) {
+  const delimitadoresEscapados = delimitadores.map(escaparDelimitador);
+  return new RegExp(delimitadoresEscapados.join("|"));
+}
+
+function escaparDelimitador(delimitador) {
+  return delimitador.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function sumarNumerosDesdeCadena(cadena, delimitadorRegex) {
@@ -56,4 +58,4 @@ function verificarNumerosNegativos(numeros) {
   }
 }
 
-export default sumarDesdeCadena;
+export default calcular;
