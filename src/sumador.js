@@ -12,7 +12,7 @@ function extraerDelimitadorYNumeros(cadenaEntrada) {
   const delimitador = new RegExp(`${delimitadoresEscapados.join('|')}|,|-`);
   const cadenaNumeros = cadenaEntrada.slice(delimitadorPersonalizado[0].length);
 
-  return { delimitador, cadenaNumeros };
+  return { delimitador: expresionDelimitadores, numerosComoTexto };
 }
 
 function esCadenaEntradaVacia(cadenaEntrada) {
@@ -28,13 +28,13 @@ function sumarNumerosDeCadena(cadenaEntrada) {
     return 0;
   }
 
-  const { delimitador, cadenaNumeros } = extraerDelimitadorYNumeros(cadenaEntrada);
+  const { delimitador: expresionDelimitadores, numerosComoTexto } = extraerDelimitadorYNumeros(cadenaEntrada);
 
-  const numeros = cadenaNumeros
-    .split(delimitador)
+  const numerosParseados = numerosComoTexto
+    .split(expresionDelimitadores)
     .map(Number);
 
-  const numerosValidos = filtrarNumerosValidos(numeros);
+  const numerosValidos = filtrarNumerosValidos(numerosParseados);
 
   return numerosValidos.reduce((acc, num) => acc + num, 0);
 }
